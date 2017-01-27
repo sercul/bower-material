@@ -10430,7 +10430,7 @@ function MdDialogProvider($$interimElementProvider) {
     function stretchDialogContainerToViewport(container, options) {
       var isFixed = $window.getComputedStyle($document[0].body).position == 'fixed';
       var backdrop = options.backdrop ? $window.getComputedStyle(options.backdrop[0]) : null;
-      var height = backdrop ? Math.min($document[0].body.clientHeight, Math.ceil(Math.abs(parseInt(backdrop.height, 10)))) : 0;
+      var height = backdrop ? Math.min(parseInt($window.getComputedStyle($document[0].body).minHeight), $document[0].body.clientHeight, Math.ceil(Math.abs(parseInt(backdrop.height, 10)))) : 0;
 
       var previousStyles = {
         top: container.css('top'),
