@@ -20242,16 +20242,35 @@ function SelectProvider($$interimElementProvider) {
       var scaleX = Math.round(100 * Math.min(targetRect.width / selectMenuRect.width, 1.0)) / 100;
       var scaleY = Math.round(100 * Math.min(targetRect.height / selectMenuRect.height, 1.0)) / 100;
 
-      return {
-        container: {
-          element: angular.element(containerNode),
-          styles: {
-            left: Math.floor(clamp(bounds.left, left, bounds.right - containerRect.width)),
-            top: Math.floor(clamp(bounds.top, top, bounds.bottom - containerRect.height)),
-            'min-width': minWidth,
-            'font-size': fontSize
-          }
-        },
+        var topP = clamp(bounds.top, top, bounds.bottom - containerRect.height);
+
+        if (topP == bounds.bottom - containerRect.height) {
+            topP -= containerRect.height / 2;
+        } else {
+
+            if (Math.abs(topP - containerRect.top) == 1 || (containerRect.top == -1 && clamp(bounds.top, top - containerRect.height, bounds.bottom - containerRect.height) == top - containerRect.height)) {
+                topP -= containerRect.height;
+            } else {
+                if (Math.abs(topP - containerRect.bottom) == 1) {
+                    topP -= containerRect.height;
+                } else {
+                    if (Math.abs(containerRect.bottom - topP) == centeredRect.height - 1) {
+                        topP -= containerRect.height;
+                    }
+                }
+            }
+        }
+
+        return {
+            container: {
+                element: angular.element(containerNode),
+                styles: {
+                    left: Math.floor(clamp(bounds.left, left, bounds.right - containerRect.width)),
+                    top: Math.floor(topP),
+                    'min-width': minWidth,
+                    'font-size': fontSize
+                }
+            },
         dropDown: {
           element: angular.element(selectNode),
           styles: {
